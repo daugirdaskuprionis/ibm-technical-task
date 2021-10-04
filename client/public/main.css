@@ -76,8 +76,17 @@ body {
     margin-top: 100px;
 }
 
-.infoDisplay {
+.errorMessage {
+    color: red;
+}
+
+.loadingMessage {
     text-align: center;
     font-size: 1.3em;
     margin: 2rem 0;
+}
+
+.submitLoading {
+    text-align: center;
+    padding: 100px;
 }

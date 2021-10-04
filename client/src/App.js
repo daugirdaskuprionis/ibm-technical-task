@@ -4,6 +4,7 @@ function App() {
   const [fetchedData, setFetchedData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     loadImages();
@@ -13,12 +14,12 @@ function App() {
     fetch('http://localhost:2000/photosAPI')
       .then(response => response.json())
       .then(data => { setFetchedData(data); setLoading(false); })
-      .catch((err) => { setError(err); setLoading(false); })
+      .catch((err) => { setError('Failed to fetch'); setLoading(false); })
   }
 
   const handleUrlSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitLoading(true);
 
     const inputObject = { url: document.querySelector('.inputUrl').value };
 
@@ -31,10 +32,10 @@ function App() {
     .then((response) => { 
       if (response.code === 'ENOENT') {
         setError('Invalid URL');
-        setLoading(false);
+        setSubmitLoading(false);
       } else {
         setFetchedData(fetchedData => [response, ...fetchedData ]); 
-        setLoading(false); 
+        setSubmitLoading(false); 
       }
     })
 
@@ -44,6 +45,7 @@ function App() {
   const DisplayImages = ({ itemsArr }) => {
     return (
       <ul className="imageContainer">
+        {submitLoading && <div className="submitLoading">Loading...</div>}
         { itemsArr.map(item => 
         <li className="imageItem" key={item._id}>
           <img src={item.url} alt="Result of input" />
@@ -58,14 +60,12 @@ function App() {
     <div className="App">
 
       <form className="formContainer" onSubmit={handleUrlSubmit}>
-        
+        { error && <div className="errorMessage">{error}</div> }
         <input className="inputUrl" type="text" name="inputUrl" placeholder="Image URL" required />
         <input className="inputSubmit" type="submit" value="Submit" />
       </form>
 
-      {
-        isLoading === true ? <div>Loading...</div> : <DisplayImages itemsArr={fetchedData} />
-      }
+      { isLoading === true ? <div className="loadingMessage">Loading...</div> : <DisplayImages itemsArr={fetchedData} /> }
       
   </div>
   );
