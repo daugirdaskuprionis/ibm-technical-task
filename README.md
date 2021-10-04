@@ -2,6 +2,8 @@
 
 Application was developed using Express.js, React.js, MongoDB Atlas, Google Vision API.
 
+App preview https://ibm-technical-task.herokuapp.com/
+
 ## Steps to run program
 
 1. Please use your own Google Vision API key and insert it into VisionKey.json file.
