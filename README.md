@@ -4,8 +4,10 @@ Application was developed using Express.js, React.js, MongoDB Atlas, Google Visi
 
 ## Steps to run program
 
-1. Open command-line interpreter, at the project directory run `npm install`. When modules installed, run `npm start`.
-2. In another command-line interpreter, at the project directory run `cd client`, then `npm install`. When modules installed, run `npm start`.
+1. Please use your own Google Vision API key and insert it into VisionKey.json file.
+2. Open command-line interpreter, at the project directory run `npm install`. When modules installed, run `npm start`.
+3. In another command-line interpreter, at the project directory run `cd client`, then `npm install`. When modules installed, run `npm start`.
+- Production build run `npm run build` at client directory.
 
 ## Implementation Ideas
 
