@@ -10,13 +10,10 @@ function App() {
   }, []);
 
   const loadImages = () => {
-    fetch('http://localhost:2000/', {
-      method: 'GET',
-    })
-    
-    .then(response => response.json())
-    .then(data => { setFetchedData(data); setLoading(false); })
-    .catch((err) => { setError(err); setLoading(false); })
+    fetch('http://localhost:2000/photosAPI')
+      .then(response => response.json())
+      .then(data => { setFetchedData(data); setLoading(false); })
+      .catch((err) => { setError(err); setLoading(false); })
   }
 
   const handleUrlSubmit = (e) => {
@@ -44,27 +41,31 @@ function App() {
     document.querySelector('.formContainer').reset();
   }
 
-  return (
-    <div className="App">
-
-      <form className="formContainer" onSubmit={handleUrlSubmit}>
-        <input className="inputUrl" type="text" name="inputUrl" placeholder="Image URL" required />
-        <input className="inputSubmit" type="submit" value="Submit" />
-      </form>
-
-      <div className="infoDisplay">
-        { error && <div>{ error }</div> }
-        { isLoading && <div>Loading...</div> }
-      </div>
-      
+  const DisplayImages = ({ itemsArr }) => {
+    return (
       <ul className="imageContainer">
-        { fetchedData.map(item => 
+        { itemsArr.map(item => 
         <li className="imageItem" key={item._id}>
           <img src={item.url} alt="Result of input" />
           <p>{item.labels.join(', ')}</p>
         </li>)
         }
       </ul>
+    );
+  }
+
+  return (
+    <div className="App">
+
+      <form className="formContainer" onSubmit={handleUrlSubmit}>
+        
+        <input className="inputUrl" type="text" name="inputUrl" placeholder="Image URL" required />
+        <input className="inputSubmit" type="submit" value="Submit" />
+      </form>
+
+      {
+        isLoading === true ? <div>Loading...</div> : <DisplayImages itemsArr={fetchedData} />
+      }
       
   </div>
   );

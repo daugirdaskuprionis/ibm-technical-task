@@ -7,10 +7,11 @@ const visionClient = new vision.ImageAnnotatorClient({ keyFilename: "./VisionKey
 const mongoose = require("mongoose");
 const db = mongoose.connection;
 const limitTotalImages = 5; // limit to total 5 queries on page load;
+const path = require("path");
 
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.static('./client/build/'))
 
 mongoose.connect("mongodb+srv://dbUser:dbUserPassword@cluster0.xgmtd.mongodb.net/db?retryWrites=true&w=majority");
 db.on("error", console.error.bind(console, "connection error: "));
@@ -23,14 +24,17 @@ const ImageSchema = new mongoose.Schema({
 
 const Image = mongoose.model("Image", ImageSchema, 'imagesCollection');
 
-app.get('/', (req, res) => {
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, './client/build/index.html'));
+});
+
+app.get('/photosAPI', (req, res) => {
     Image.find({}, (err, result) => {
-        if (err) res.send(err);
+        if (err) console.log(err);
         else res.send(result);
     })
     .limit(limitTotalImages)
-    .sort({_id:-1});
-    
+    .sort({_id:-1}); 
 });
 
 app.post('/', (req, res) => {
@@ -45,6 +49,6 @@ app.post('/', (req, res) => {
         res.send(data);
     })
     .catch((err) => { console.log(err); res.send(err); });
-})
+});
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
